@@ -26,7 +26,12 @@ class Cliente{
     public function obtenerClientes(): array {
         try {
             $stmt = $this->pdo->query("SELECT * FROM clientes");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC); // Solo devuelve datos asociativos
+            $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC); // Solo devuelve datos asociativos
+            if($clientes){
+                return $clientes;
+            }else{
+                return ["sin datos"];
+            }
         } catch (PDOException $e) {
             error_log("Error en obtenerClientes: " . $e->getMessage()); // Logging
             return [];
@@ -39,7 +44,14 @@ class Cliente{
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM clientes WHERE numero_documento = ?");
             $stmt->execute([$numero_documento]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($cliente){
+                return $cliente;
+            }else{
+                return null;
+            }
+            
         } catch (PDOException $e) {
             error_log("Error en obtenerClientesNumeroDocumento: " . $e->getMessage());
             return null;
@@ -85,8 +97,19 @@ class Cliente{
         if (!is_numeric($numero_documento)) return false;
 
         try {
-            $stmt = $this->pdo->prepare("DELETE FROM clientes WHERE numero_documento = ?");
-            return $stmt->execute([$numero_documento]);
+
+            $stmt = $this->pdo->prepare("SELECT * FROM clientes WHERE numero_documento = ?");
+            $stmt->execute([$numero_documento]);
+            $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($cliente){
+
+                $stmt = $this->pdo->prepare("DELETE FROM clientes WHERE numero_documento = ?");
+                return $stmt->execute([$numero_documento]);
+                
+            }else{
+                return false;
+            }
+            
         } catch (PDOException $e) {
             error_log("Error en delete: " . $e->getMessage());
             return false;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-07-2025 a las 00:27:13
+-- Tiempo de generación: 18-07-2025 a las 00:30:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -57,6 +57,13 @@ CREATE TABLE `guias` (
   `telefono` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Volcado de datos para la tabla `guias`
+--
+
+INSERT INTO `guias` (`identificacion`, `nombres`, `apellidos`, `telefono`) VALUES
+(123, 'pepe', 'loco', 12345);
+
 -- --------------------------------------------------------
 
 --
@@ -66,7 +73,8 @@ CREATE TABLE `guias` (
 CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `fecha_reserva` datetime DEFAULT NULL,
-  `total` double DEFAULT NULL
+  `total` double DEFAULT NULL,
+  `cliente_numero_documento` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -84,6 +92,14 @@ CREATE TABLE `tours` (
   `cupos_totales` int(11) DEFAULT NULL,
   `guias_identificacion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `tours`
+--
+
+INSERT INTO `tours` (`id`, `nombre`, `ciudad`, `descripcion`, `precio`, `cupos_totales`, `guias_identificacion`) VALUES
+(1, 'pepe', 'lol', 'es un tour', 432.00, 30, 123),
+(2, 'lola', 'pro', 'es un tour', 432.00, 30, 123);
 
 -- --------------------------------------------------------
 
@@ -117,7 +133,8 @@ ALTER TABLE `guias`
 -- Indices de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_numero_documento` (`cliente_numero_documento`);
 
 --
 -- Indices de la tabla `tours`
@@ -148,11 +165,17 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT de la tabla `tours`
 --
 ALTER TABLE `tours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `reservas`
+--
+ALTER TABLE `reservas`
+  ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`cliente_numero_documento`) REFERENCES `clientes` (`numero_documento`);
 
 --
 -- Filtros para la tabla `tours`

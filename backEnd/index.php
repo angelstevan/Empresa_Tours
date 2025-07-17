@@ -1,6 +1,8 @@
 <?php
 require_once 'db.php';
 require_once 'models/cliente.php';
+require_once 'models/guia.php';
+require_once 'models/tour.php';
 
 header("Content-Type: application/json");
 
@@ -14,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $cliente = new Cliente($pdo);
+$guia = new Guia($pdo);
+$tour = new Tour($pdo);
 
 // Obtener método y URI
 $method = $_SERVER['REQUEST_METHOD'];
@@ -27,6 +31,14 @@ $id = $uri[3] ?? null;
 switch ($resource) {
     case 'cliente':
         require 'controllers/clienteController.php';
+        break;
+
+    case 'guia':
+        require 'controllers/guiaController.php';
+        break;
+
+    case 'tour':
+        require 'controllers/tourController.php';
         break;
 
     default:
