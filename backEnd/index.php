@@ -3,6 +3,7 @@ require_once 'db.php';
 require_once 'models/cliente.php';
 require_once 'models/guia.php';
 require_once 'models/tour.php';
+require_once 'models/reserva.php';
 
 header("Content-Type: application/json");
 
@@ -18,14 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $cliente = new Cliente($pdo);
 $guia = new Guia($pdo);
 $tour = new Tour($pdo);
+$reserva = new Reserva($pdo);
 
 // Obtener método y URI
 $method = $_SERVER['REQUEST_METHOD'];
 $uri = explode('/', trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'));
 
 // Suponiendo estructura tipo: /api/xyz/cliente/5
-$resource = $uri[2] ?? null; // "cliente"
-$id = $uri[3] ?? null;
+$resource = $uri[1] ?? null; // "cliente"
+$id = $uri[2] ?? null;
 
 // Ruteo manual simple
 switch ($resource) {
@@ -39,6 +41,10 @@ switch ($resource) {
 
     case 'tour':
         require 'controllers/tourController.php';
+        break;
+
+    case 'reserva':
+        require 'controllers/reservaController.php';
         break;
 
     default:
