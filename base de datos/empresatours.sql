@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-07-2025 a las 00:30:16
+-- Tiempo de generación: 25-07-2025 a las 03:31:31
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -73,9 +73,17 @@ INSERT INTO `guias` (`identificacion`, `nombres`, `apellidos`, `telefono`) VALUE
 CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `fecha_reserva` datetime DEFAULT NULL,
-  `total` double DEFAULT NULL,
-  `cliente_numero_documento` int(11) NOT NULL
+  `total` double(13,2) DEFAULT NULL,
+  `cliente_numero_documento` int(11) NOT NULL,
+  `estado` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `fecha_reserva`, `total`, `cliente_numero_documento`, `estado`) VALUES
+(1, '2025-07-22 15:38:58', 864.00, 112542, 'Eliminado');
 
 -- --------------------------------------------------------
 
@@ -98,7 +106,7 @@ CREATE TABLE `tours` (
 --
 
 INSERT INTO `tours` (`id`, `nombre`, `ciudad`, `descripcion`, `precio`, `cupos_totales`, `guias_identificacion`) VALUES
-(1, 'pepe', 'lol', 'es un tour', 432.00, 30, 123),
+(1, 'pepe', 'lol', 'es un tour', 432.00, 28, 123),
 (2, 'lola', 'pro', 'es un tour', 432.00, 30, 123);
 
 -- --------------------------------------------------------
@@ -112,6 +120,13 @@ CREATE TABLE `tours_has_reservas` (
   `reserva_id` int(11) NOT NULL,
   `cantidad_personas` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Volcado de datos para la tabla `tours_has_reservas`
+--
+
+INSERT INTO `tours_has_reservas` (`tour_id`, `reserva_id`, `cantidad_personas`) VALUES
+(2, 1, 2);
 
 --
 -- Índices para tablas volcadas
@@ -159,7 +174,7 @@ ALTER TABLE `tours_has_reservas`
 -- AUTO_INCREMENT de la tabla `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `tours`
